@@ -3,6 +3,7 @@ package main;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -16,12 +17,12 @@ public class ShannonFano {
 
 		ArrayList<Probabilities> elements = new ArrayList<>();
 		ArrayList<Double> probabilities = new ArrayList<>();
-		String path = "src" + File.separator + "files" + File.separator;
+		String path = "files" + File.separator;
 		Scanner scanner;
 		for (int i = 0; i < 5; i++) {
 			System.out.println((i + 1) + ". fájl");
-			File file = new File(path + "source" + (i + 1) + ".txt");
-			scanner = new Scanner(file);
+			File sourceFile = new File(System.getProperty("user.dir"), path + "source" + (i + 1) + ".txt");
+			scanner = new Scanner(sourceFile);
 			while (scanner.hasNextLine()) {
 				String tmp = scanner.nextLine();
 				if (isDouble(tmp)) {
@@ -40,51 +41,58 @@ public class ShannonFano {
 					freqMap.clear();
 				}
 			}
-		for (int j = 0; j < probabilities.size(); j++) {
-			Probabilities probability = new Probabilities();
-			probability.setValue(probabilities.get(j));
-			elements.add(probability);
-		}
+			scanner.close();
+			for (int j = 0; j < probabilities.size(); j++) {
+				Probabilities probability = new Probabilities();
+				probability.setValue(probabilities.get(j));
+				elements.add(probability);
+			}
 
-		System.out.println((i + 1) + ". forrásnál " + "P halmaz:");
-		for (Probabilities prob : elements) {
-			System.out.print(prob.getValue() + " ");
-		}
+			System.out.println((i + 1) + ". forrásnál " + "P halmaz:");
+			for (Probabilities prob : elements) {
+				System.out.print(prob.getValue() + " ");
+			}
 
-		Collections.sort(elements, Collections.reverseOrder());
+			Collections.sort(elements, Collections.reverseOrder());
 
-		System.out.println("\n" + (i + 1) + ". forrásnál " + "P* halmaz:");
-		for (Probabilities prob : elements) {
-			System.out.print(prob.getValue() + " ");
-		}
+			System.out.println("\n" + (i + 1) + ". forrásnál " + "P* halmaz:");
+			for (Probabilities prob : elements) {
+				System.out.print(prob.getValue() + " ");
+			}
 
-		// X*
-		elements.get(0).setxStar(0.00); // fix
-		for (int j = 1; j < elements.size(); j++) {
-			elements.get(j).setxStar(sum(elements, j - 1));
-		}
+			// X*
+			elements.get(0).setxStar(0.00); // fix
+			for (int j = 1; j < elements.size(); j++) {
+				elements.get(j).setxStar(sum(elements, j - 1));
+			}
 
-		System.out.println("\n" + (i + 1) + ". forrásnál " +"X* halmaz: ");
-		for (Probabilities prob : elements) {
-			System.out.print(prob.getxStar() + " ");
-		}
+			System.out.println("\n" + (i + 1) + ". forrásnál " + "X* halmaz: ");
+			for (Probabilities prob : elements) {
+				System.out.print(prob.getxStar() + " ");
+			}
 
-		// division and coding
-		codewords(elements, 0, 1, 0.5);
+			// division and coding
+			codewords(elements, 0, 1, 0.5);
 
-		System.out.println("\n" + (i + 1) + ". forrásnál " +" kódszavak: ");
-		FileWriter fileWriter = new FileWriter(path + "result" + (i + 1) + ".txt");
-		for (Probabilities prob : elements) {
-			System.out.print(prob.getCodeword() + " ");
-			fileWriter.write(prob.getCodeword());
-		}
+			System.out.println("\n" + (i + 1) + ". forrásnál " + " kódszavak: ");
 
-		System.out.println("\n" + (i + 1) + ". forrásnál " + "hatásfok: " + codingEfficiency(elements));
-		fileWriter.write("\nHatásfok: " + codingEfficiency(elements));
-		fileWriter.close();
-		probabilities.clear();
-		elements.clear();
-		System.out.println();
+			File resultFile = new File(System.getProperty("user.dir"), path + "result" + (i + 1) + ".txt");
+
+			Files.deleteIfExists(resultFile.toPath());
+			resultFile.createNewFile();
+			resultFile.setWritable(true, false);
+			FileWriter fileWriter = new FileWriter(resultFile);
+			for (Probabilities prob : elements) {
+				System.out.print(prob.getCodeword() + " ");
+				fileWriter.write(prob.getCodeword());
+			}
+
+			System.out.println("\n" + (i + 1) + ". forrásnál " + "hatásfok: " + codingEfficiency(elements));
+			fileWriter.write("\nHatásfok: " + codingEfficiency(elements));
+			fileWriter.close();
+			probabilities.clear();
+			elements.clear();
+			System.out.println();
 		}
 	}
 
