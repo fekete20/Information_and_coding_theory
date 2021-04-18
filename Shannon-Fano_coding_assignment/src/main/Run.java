@@ -1,10 +1,11 @@
 package main;
 
+import java.io.IOException;
+
 public class Run {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public static void main(String[] args) throws IOException {
+		ShannonFano shannonFano = new ShannonFano();
+		shannonFano.calcShannonFano();
 	}
-
 }
