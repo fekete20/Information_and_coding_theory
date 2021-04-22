@@ -103,18 +103,18 @@ public class ShannonFano {
 					System.out.print(entry.getKey());
 					fileWriter.write(entry.getKey());
 					System.out.print("\t\t" + entry.getValue());
-					fileWriter.write("\t\t\t" + entry.getValue());
+					fileWriter.write("\t\t" + entry.getValue());
 					System.out.print("\t\t" + elements.get(j).getValue());
-					fileWriter.write("\t\t\t" + elements.get(j).getValue());
+					fileWriter.write("\t\t" + elements.get(j).getValue());
 					System.out.println("\t" + elements.get(j).getCodeword());
-					fileWriter.write("\t\t" + elements.get(j).getCodeword() + "\n");
+					fileWriter.write("\t" + elements.get(j).getCodeword() + "\n");
 					j++;
 				}
 				freqMap.clear();
 			}
 
 			System.out.println((i + 1) + ". forrásnál " + "entrópia hatásfok: " + codingEfficiency(elements));
-			fileWriter.write("\nEntrópia hatásfok értékek: " + codingEfficiency(elements));
+			fileWriter.write("\nEntrópia hatásfok értéke: " + codingEfficiency(elements));
 			fileWriter.close();
 			probabilities.clear();
 			elements.clear();
