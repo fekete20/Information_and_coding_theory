@@ -18,7 +18,6 @@ public class ShannonFano {
 
 		ArrayList<Probabilities> elements = new ArrayList<>();
 		ArrayList<Double> probabilities = new ArrayList<>();
-		ArrayList<Double> order = new ArrayList<>();
 		Map<Character, Long> freqMap = null;
 		boolean isCharacter = false;
 		String path = "files" + File.separator;
@@ -119,7 +118,6 @@ public class ShannonFano {
 			probabilities.clear();
 			elements.clear();
 			characters.clear();
-			order.clear();
 			System.out.println();
 		}
 	}
